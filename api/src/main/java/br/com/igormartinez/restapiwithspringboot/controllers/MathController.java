@@ -5,72 +5,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.igormartinez.restapiwithspringboot.SimpleMath;
-import br.com.igormartinez.restapiwithspringboot.exceptions.UnsupportedMathOperationException;
-import br.com.igormartinez.restapiwithspringboot.utils.NumberConverter;
+import br.com.igormartinez.restapiwithspringboot.services.MathService;
 
 @RestController
 public class MathController {
 
-    SimpleMath math = new SimpleMath();
+    MathService mathService = new MathService();
 
     @RequestMapping(value = "/sum/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double sum(@PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo) {
-
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.sum(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    public Double sum(@PathVariable(value = "numberOne") Double numberOne,
+            @PathVariable(value = "numberTwo") Double numberTwo) {
+        return mathService.sum(numberOne, numberTwo);
     }
 
-    @RequestMapping(value = "/sub/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double sub(@PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo) {
-
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.sub(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @RequestMapping(value = "/subtraction/{numberOne}/{numberTwo}", method = RequestMethod.GET)
+    public Double sub(@PathVariable(value = "numberOne") Double numberOne,
+            @PathVariable(value = "numberTwo") Double numberTwo) {
+        return mathService.subtraction(numberOne, numberTwo);
     }
 
-    @RequestMapping(value = "/mult/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double mult(@PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo) {
-
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.mult(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @RequestMapping(value = "/multiplication/{numberOne}/{numberTwo}", method = RequestMethod.GET)
+    public Double mult(@PathVariable(value = "numberOne") Double numberOne,
+            @PathVariable(value = "numberTwo") Double numberTwo) {
+        return mathService.multiplication(numberOne, numberTwo);
     }
 
-    @RequestMapping(value = "/div/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double div(@PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo) {
-
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.div(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @RequestMapping(value = "/division/{numberOne}/{numberTwo}", method = RequestMethod.GET)
+    public Double div(@PathVariable(value = "numberOne") Double numberOne,
+            @PathVariable(value = "numberTwo") Double numberTwo) {
+        return mathService.division(numberOne, numberTwo);
     }
 
-    @RequestMapping(value = "/avr/{numberOne}/{numberTwo}", method = RequestMethod.GET)
-    public Double avr(@PathVariable(value = "numberOne") String numberOne,
-            @PathVariable(value = "numberTwo") String numberTwo) {
-
-        if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.avr(NumberConverter.convertToDouble(numberOne), NumberConverter.convertToDouble(numberTwo));
+    @RequestMapping(value = "/average/{numberOne}/{numberTwo}", method = RequestMethod.GET)
+    public Double avr(@PathVariable(value = "numberOne") Double numberOne,
+            @PathVariable(value = "numberTwo") Double numberTwo) {
+        return mathService.average(numberOne, numberTwo);
     }
 
-    @RequestMapping(value = "/sqrt/{number}", method = RequestMethod.GET)
-    public Double sqrt(@PathVariable(value = "number") String number) {
-
-        if (!NumberConverter.isNumeric(number))
-            throw new UnsupportedMathOperationException("Please set a numeric value!");
-
-        return math.sqrt(NumberConverter.convertToDouble(number));
+    @RequestMapping(value = "/squareroot/{number}", method = RequestMethod.GET)
+    public Double sqrt(@PathVariable(value = "number") Double number) {
+        return mathService.squareRoot(number);
     }
 
 }
