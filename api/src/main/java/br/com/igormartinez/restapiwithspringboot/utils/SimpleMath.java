@@ -1,6 +1,6 @@
-package br.com.igormartinez.restapiwithspringboot.services;
+package br.com.igormartinez.restapiwithspringboot.utils;
 
-public class MathService {
+public class SimpleMath {
     public Double sum(Double numberOne, Double numberTwo) {
         return numberOne + numberTwo;
     }

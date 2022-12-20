@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.models;
+package br.com.igormartinez.restapiwithspringboot.utils;
 
 public class Greeting {
     private final long id;
