@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.igormartinez.restapiwithspringboot.services.MathService;
 
 @RestController
+@RequestMapping("/math")
 public class MathController {
 
     MathService mathService = new MathService();
