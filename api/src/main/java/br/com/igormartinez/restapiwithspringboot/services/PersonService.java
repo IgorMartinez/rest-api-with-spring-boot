@@ -1,8 +1,6 @@
 package br.com.igormartinez.restapiwithspringboot.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +13,10 @@ import br.com.igormartinez.restapiwithspringboot.repositories.PersonRepository;
 @Service
 public class PersonService {
 
-    private final AtomicLong counter = new AtomicLong();
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
     @Autowired
     PersonRepository repository;
-
-    private Person mockPerson(int i) {
-        Person person = new Person();
-        person.setId(counter.incrementAndGet());
-        person.setFirstName("Person first name " + i);
-        person.setLastName("Person last name " + i);
-        person.setAddress("Person address " + i);
-        person.setGender(i%2==0 ? "M" : "F");
-
-        return person;
-    }
 
     public List<Person> findAll() {
         logger.info("Finding all people");
