@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.igormartinez.restapiwithspringboot.models.Person;
-import br.com.igormartinez.restapiwithspringboot.services.PersonServices;
+import br.com.igormartinez.restapiwithspringboot.services.PersonService;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
 
     @Autowired
-    private PersonServices service;
+    private PersonService service;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Person> findAll() {
@@ -26,7 +26,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value="id") String id) {
+    public Person findById(@PathVariable(value="id") Long id) {
         return service.findById(id);
     }
 
@@ -41,7 +41,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value="id") String id) {
+    public void delete(@PathVariable(value="id") Long id) {
         service.delete(id);
     }
 }
