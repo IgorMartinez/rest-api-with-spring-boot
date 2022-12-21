@@ -18,7 +18,7 @@ import br.com.igormartinez.restapiwithspringboot.data.vo.v1.PersonVO;
 import br.com.igormartinez.restapiwithspringboot.services.PersonService;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
     @Autowired
