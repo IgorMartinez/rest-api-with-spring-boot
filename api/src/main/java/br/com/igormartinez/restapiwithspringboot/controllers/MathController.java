@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.igormartinez.restapiwithspringboot.utils.SimpleMath;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/math")
+@RequestMapping("/api/math")
+@Tag(name = "Math", description = "Endpoint to do math")
 public class MathController {
 
     SimpleMath math = new SimpleMath();
