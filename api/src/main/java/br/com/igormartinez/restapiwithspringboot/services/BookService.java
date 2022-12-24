@@ -55,14 +55,9 @@ public class BookService {
         logger.info("Updating one book");
         if (bookVO == null) throw new RequiredObjectIsNullException();
 
-        Book book = repository.findById(bookVO.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("No record found with this ID"));
+        if (!repository.existsById(bookVO.getId())) throw new ResourceNotFoundException("No record found with this ID");
 
-        book.setAuthor(bookVO.getAuthor());
-        book.setLaunchDate(bookVO.getLaunchDate());
-        book.setPrice(bookVO.getPrice());
-        book.setTitle(bookVO.getTitle());
-        Book updatedBook = repository.save(book);
+        Book updatedBook = repository.save(DozerMapper.parseObject(bookVO, Book.class));
 
         BookVO updatedBookVO = DozerMapper.parseObject(updatedBook, BookVO.class);
         updatedBookVO.add(linkTo(methodOn(BookController.class).findById(updatedBookVO.getId())).withSelfRel());

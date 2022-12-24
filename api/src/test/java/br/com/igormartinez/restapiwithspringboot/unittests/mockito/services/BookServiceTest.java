@@ -167,7 +167,7 @@ public class BookServiceTest {
     void testUpdate(){
         Book book = input.mockEntity(1);
         Book persistedBook = book;
-        when(repository.findById(1L)).thenReturn(Optional.of(book));
+        when(repository.existsById(1L)).thenReturn(true);
         when(repository.save(book)).thenReturn(persistedBook);
 
         BookVO bookVO = input.mockVO(1);
