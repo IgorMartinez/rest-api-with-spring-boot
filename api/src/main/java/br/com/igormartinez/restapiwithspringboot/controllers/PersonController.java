@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+// @CrossOrigin
 @RestController
 @RequestMapping("/api/person/v1")
 @Tag(name = "Person", description = "Endpoint for managing person")
@@ -51,6 +52,7 @@ public class PersonController {
         return service.findAll();
     }
 
+    // @CrossOrigin(origins = "http://localhost:8080")
     @Operation(summary = "Finds a person", description = "Finds a person", 
         tags = {"Person"},
         responses = {
@@ -67,6 +69,7 @@ public class PersonController {
         return service.findById(id);
     }
 
+    // @CrossOrigin(origins = {"http://localhost:8080", "https://erudio.com.br"})
     @Operation(summary = "Add a new person", description = "Add a new person", 
         tags = {"Person"},
         responses = {
