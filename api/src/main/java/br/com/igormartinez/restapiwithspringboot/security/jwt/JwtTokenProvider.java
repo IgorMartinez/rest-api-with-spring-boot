@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
 
 import br.com.igormartinez.restapiwithspringboot.data.vo.v1.security.TokenVO;
 import br.com.igormartinez.restapiwithspringboot.exceptions.InvalidJwtAuthenticationException;
@@ -29,7 +29,7 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
 
-    @Value("${security.jwt.token.secret-expire-length:3600000}")
+    @Value("${security.jwt.token.expire-length:3600000}")
     private Long validInMilliseconds = 3600000L; // 1h
 
     @Autowired
@@ -106,7 +106,6 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             DecodedJWT decodedJWT = decodedToken(token);
-
             if (decodedJWT.getExpiresAt().before(new Date())) return false;
 
             return true;
