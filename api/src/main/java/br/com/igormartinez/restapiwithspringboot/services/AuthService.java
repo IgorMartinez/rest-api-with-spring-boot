@@ -38,12 +38,24 @@ public class AuthService {
                 throw new UsernameNotFoundException("Username " + username + " not found");
             }
             
-            TokenVO tokenVO = new TokenVO();
-            tokenVO = tokenProvider.createAccessToken(username, user.getRoles());
+            TokenVO tokenVO = tokenProvider.createAccessToken(username, user.getRoles());
 
             return ResponseEntity.ok(tokenVO);
         } catch (Exception ex) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public ResponseEntity refreshToken(String username, String refreshToken) {
+        User user = repository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Username " + username + " not found");
+        }
+
+        TokenVO tokenVO = tokenProvider.refreshToken(refreshToken);
+
+        return ResponseEntity.ok(tokenVO);
     }
 }
