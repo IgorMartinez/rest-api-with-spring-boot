@@ -1,6 +1,8 @@
 package br.com.igormartinez.restapiwithspringboot.exceptions;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ExceptionResponse implements Serializable {
@@ -25,5 +27,10 @@ public class ExceptionResponse implements Serializable {
 
     public String getDetails() {
         return details;
+    }
+
+    public String toJsonString(){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        return "{\"timestamp\":\""+df.format(timestamp)+"\",\"message\":\""+message+"\",\"details\":\""+details+"\"}";
     }
 }

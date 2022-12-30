@@ -24,6 +24,8 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        System.out.println("[DBG] Request URL: " + ((HttpServletRequest) request).getRequestURL().toString());
+        
         String token = tokenProvider.resolveToken((HttpServletRequest) request);
         
         if (token != null && tokenProvider.validateToken(token)) {
@@ -32,7 +34,7 @@ public class JwtTokenFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-
+        
         chain.doFilter(request, response);
     }
     

@@ -19,7 +19,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import br.com.igormartinez.restapiwithspringboot.data.vo.v1.security.TokenVO;
-import br.com.igormartinez.restapiwithspringboot.exceptions.InvalidJwtAuthenticationException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -110,7 +109,7 @@ public class JwtTokenProvider {
 
             return true;
         } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT Token");
+            return false;
         }
     }
 }

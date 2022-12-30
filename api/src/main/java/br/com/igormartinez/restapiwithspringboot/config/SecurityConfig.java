@@ -18,6 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtConfigurer;
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtTokenProvider;
+import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomAuthenticationEntryPoint;
+import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomAccessDeniedHandler;
+
 
 @Configuration
 public class SecurityConfig {
@@ -47,13 +50,17 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(
                 authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/api/v1/**").authenticated()
-                .requestMatchers("/users").denyAll()
+                    .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/users").denyAll()
             )
             .cors()
             .and()
                 .apply(new JwtConfigurer(tokenProvider))
+            .and()
+                .exceptionHandling()
+                    .accessDeniedHandler(new CustomAccessDeniedHandler())
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
             .and()
                 .build();
     }
