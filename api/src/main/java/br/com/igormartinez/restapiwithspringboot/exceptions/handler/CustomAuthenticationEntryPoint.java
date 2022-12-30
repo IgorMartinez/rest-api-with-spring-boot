@@ -20,7 +20,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json");
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Authentication required", request.getRequestURI());
         response.getWriter().write(exceptionResponse.toJsonString());
-        response.setStatus(403);
+        response.setStatus(401);
     }
 
 }
