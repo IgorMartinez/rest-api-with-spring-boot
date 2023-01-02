@@ -16,11 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomSpringSecurityExceptionHandler;
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtConfigurer;
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtTokenProvider;
-import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomAuthenticationEntryPoint;
-import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomAccessDeniedHandler;
-
 
 @Configuration
 public class SecurityConfig {
@@ -59,8 +57,8 @@ public class SecurityConfig {
                 .apply(new JwtConfigurer(tokenProvider))
             .and()
                 .exceptionHandling()
-                    .accessDeniedHandler(new CustomAccessDeniedHandler())
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomSpringSecurityExceptionHandler())
+                    .authenticationEntryPoint(new CustomSpringSecurityExceptionHandler())
             .and()
                 .build();
     }
