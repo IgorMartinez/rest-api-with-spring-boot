@@ -18,8 +18,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.igormartinez.restapiwithspringboot.configs.TestConfigs;
+import br.com.igormartinez.restapiwithspringboot.data.vo.v1.security.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.PersonVO;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -43,22 +45,44 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Order(1)
-	void testCreate() throws JsonMappingException, JsonProcessingException {
-		mockPersonVO();
+	@Order(0)
+	void authorization() {
+		AccountCredentialsVO user = new AccountCredentialsVO("igormartinez", "admin1234");
+
+		String accessToken = 
+			given()
+				.basePath("/auth/signin")
+					.port(TestConfigs.SERVER_PORT)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(user)
+					.when()
+				.post()
+					.then()
+						.statusCode(200)
+							.extract()
+							.body()
+								.as(TokenVO.class)
+								.getAccessToken();
 
 		specification = new RequestSpecBuilder()
-			.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+			.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
 			.setBasePath("/api/person/v1")
 			.setPort(TestConfigs.SERVER_PORT)
 			.addFilter(new RequestLoggingFilter(LogDetail.ALL))
 			.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
 			.build();
+	}
+
+	@Test
+	@Order(1)
+	void testCreate() throws JsonMappingException, JsonProcessingException {
+		mockPersonVO();
 
 		String content = 
 			given()
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.body(personVO)
 				.when()
 					.post()
@@ -88,20 +112,13 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(2)
-	void testCreateWothWrongOrigin() throws JsonMappingException, JsonProcessingException {
-
-		specification = new RequestSpecBuilder()
-			.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
-			.setBasePath("/api/person/v1")
-			.setPort(TestConfigs.SERVER_PORT)
-			.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-			.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-			.build();
+	void testCreateWithWrongOrigin() throws JsonMappingException, JsonProcessingException {
 
 		String content = 
 			given()
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.body(personVO)
 				.when()
 					.post()
@@ -118,18 +135,12 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Test
 	@Order(3)
 	void testFindById() throws JsonMappingException, JsonProcessingException {
-		specification = new RequestSpecBuilder()
-			.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
-			.setBasePath("/api/person/v1")
-			.setPort(TestConfigs.SERVER_PORT)
-			.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-			.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-			.build();
 
 		String content = 
 			given()
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.pathParam("id", personVO.getId())
 				.when()
 					.get("{id}")
@@ -159,18 +170,12 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Test
 	@Order(4)
 	void testFindByIdWithWrongOrigin() throws JsonMappingException, JsonProcessingException {
-		specification = new RequestSpecBuilder()
-			.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
-			.setBasePath("/api/person/v1")
-			.setPort(TestConfigs.SERVER_PORT)
-			.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-			.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-			.build();
 
 		String content = 
 			given()
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.pathParam("id", personVO.getId())
 				.when()
 					.get("{id}")
