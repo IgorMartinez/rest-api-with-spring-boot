@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm;
 import org.springframework.security.web.SecurityFilterChain;
 
-import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomSpringSecurityExceptionHandler;
+// import br.com.igormartinez.restapiwithspringboot.exceptions.handler.CustomSpringSecurityExceptionHandler;
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtConfigurer;
 import br.com.igormartinez.restapiwithspringboot.security.jwt.JwtTokenProvider;
 
@@ -62,10 +62,10 @@ public class SecurityConfig {
             .cors()
             .and()
                 .apply(new JwtConfigurer(tokenProvider))
-            .and()
-                .exceptionHandling()
-                    .accessDeniedHandler(new CustomSpringSecurityExceptionHandler())
-                    .authenticationEntryPoint(new CustomSpringSecurityExceptionHandler())
+            // .and()
+            //    .exceptionHandling()
+            //        .accessDeniedHandler(new CustomSpringSecurityExceptionHandler())
+            //        .authenticationEntryPoint(new CustomSpringSecurityExceptionHandler())
             .and()
                 .build();
     }
