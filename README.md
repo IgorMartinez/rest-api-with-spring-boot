@@ -7,6 +7,5 @@ Os primeiros passos foram aprendidos no curso REST API's RESTFul do 0 à AWS c. 
 # Comandos para utilização da aplicação
 
 ## Instalação do ambiente
-- Instalação Java 17
+- Instalação localmente do OpenJDK 17
 - docker-compose up -d
-- Criação do banco de dados "restapiwithspringboot"

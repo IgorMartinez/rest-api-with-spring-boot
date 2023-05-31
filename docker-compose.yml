@@ -12,10 +12,11 @@ services:
   #    - "8080:8080"
   db:
     container_name: db-restapiwithspringboot
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    build: 
+      context: ./db
+      dockerfile: Dockerfile
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: admin
     ports:
       - "3306:3306"
