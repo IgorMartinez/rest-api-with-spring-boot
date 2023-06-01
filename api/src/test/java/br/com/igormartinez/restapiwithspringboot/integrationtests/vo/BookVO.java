@@ -3,13 +3,12 @@ package br.com.igormartinez.restapiwithspringboot.integrationtests.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.lang.Nullable;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class BookVO extends RepresentationModel<BookVO> implements Serializable {
+public class BookVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
