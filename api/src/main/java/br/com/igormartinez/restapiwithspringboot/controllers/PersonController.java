@@ -79,7 +79,9 @@ public class PersonController {
             @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
-    @PostMapping(consumes = MediaType.APPLICATION_JSON, produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
+    @PostMapping(
+        consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML}, 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public PersonVO create(@RequestBody PersonVO person) {
         return service.create(person);
     }
@@ -94,7 +96,9 @@ public class PersonController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
-    @PutMapping(consumes = MediaType.APPLICATION_JSON, produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
+    @PutMapping(
+        consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML}, 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public PersonVO update(@RequestBody PersonVO person) {
         return service.update(person);
     }
