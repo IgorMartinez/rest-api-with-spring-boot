@@ -32,7 +32,6 @@ public class PersonController {
     @Autowired
     private PersonService service;
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     @Operation(summary = "Finds all person", description = "Finds all person", 
         tags = {"Person"},
         responses = {
@@ -48,11 +47,11 @@ public class PersonController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public List<PersonVO> findAll() {
         return service.findAll();
     }
 
-    // @CrossOrigin(origins = "http://localhost:8080")
     @Operation(summary = "Finds a person", description = "Finds a person", 
         tags = {"Person"},
         responses = {
@@ -64,12 +63,12 @@ public class PersonController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
-    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
+    @GetMapping(value = "/{id}", 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public PersonVO findById(@PathVariable(value="id") Long id) {
         return service.findById(id);
     }
 
-    // @CrossOrigin(origins = {"http://localhost:8080", "https://erudio.com.br"})
     @Operation(summary = "Add a new person", description = "Add a new person", 
         tags = {"Person"},
         responses = {

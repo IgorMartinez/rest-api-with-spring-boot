@@ -32,7 +32,6 @@ public class BookController {
     @Autowired
     BookService service;
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     @Operation(summary = "Finds all books", description = "Finds all books", 
         tags = {"Book"},
         responses = {
@@ -48,11 +47,11 @@ public class BookController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public List<BookVO> findAll() {
         return service.findAll();
     }
 
-    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     @Operation(summary = "Finds a book by id", description = "Finds a book by id", 
         tags = {"Book"},
         responses = {
@@ -64,11 +63,12 @@ public class BookController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @GetMapping(value = "/{id}", 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public BookVO findById(@PathVariable(value = "id") Long id) {
         return service.findById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON, produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     @Operation(summary = "Add a new book", description = "Add a new book", 
         tags = {"Book"},
         responses = {
@@ -78,11 +78,13 @@ public class BookController {
             @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @PostMapping(
+        consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML}, 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public BookVO create(@RequestBody BookVO bookVO) {
         return service.create(bookVO);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON, produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     @Operation(summary = "Update a book", description = "Update a book", 
         tags = {"Book"},
         responses = {
@@ -93,11 +95,13 @@ public class BookController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @PutMapping(
+        consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML}, 
+        produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML})
     public BookVO update(@RequestBody BookVO bookVO) {
         return service.update(bookVO);
     }
 
-    @DeleteMapping(value = "/{id}")
     @Operation(summary = "Delete a book", description = "Delete a book", 
         tags = {"Book"},
         responses = {
@@ -107,6 +111,7 @@ public class BookController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         })
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value="id")Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
