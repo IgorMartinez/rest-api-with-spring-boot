@@ -18,7 +18,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +27,7 @@ import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.BookVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.wrappers.WrapperBookVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -272,6 +272,7 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+				.queryParams("page", 1, "size", 5, "direction", "asc")
 				.when()
 					.get()
 				.then()
@@ -280,54 +281,55 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 					.body()
 						.asString();
 
-		List<BookVO> listBookVO = objectMapper.readValue(content, new TypeReference<List<BookVO>>() {});
+		WrapperBookVO wrapperBookVO = objectMapper.readValue(content, WrapperBookVO.class);
+		List<BookVO> listBookVO = wrapperBookVO.getEmbedded().getListBookVO();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		
-		BookVO foundBookVO1 = listBookVO.get(0);
+		BookVO foundBookVOPosition0 = listBookVO.get(0);
 		
-		assertNotNull(foundBookVO1);
-		assertNotNull(foundBookVO1.getId());
-        assertNotNull(foundBookVO1.getAuthor());
-        assertNotNull(foundBookVO1.getLaunchDate());
-        assertNotNull(foundBookVO1.getTitle());
-        assertNotNull(foundBookVO1.getPrice());
+		assertNotNull(foundBookVOPosition0);
+		assertNotNull(foundBookVOPosition0.getId());
+        assertNotNull(foundBookVOPosition0.getAuthor());
+        assertNotNull(foundBookVOPosition0.getLaunchDate());
+        assertNotNull(foundBookVOPosition0.getTitle());
+        assertNotNull(foundBookVOPosition0.getPrice());
 
-		assertEquals(1, foundBookVO1.getId());
-		assertEquals("Michael C. Feathers", foundBookVO1.getAuthor());
-		assertEquals(simpleDateFormat.parse("2017-11-29 13:50:05.878"), foundBookVO1.getLaunchDate());
-		assertEquals("Working effectively with legacy code", foundBookVO1.getTitle());
-		assertEquals(49.00, foundBookVO1.getPrice());
+		assertEquals(11, foundBookVOPosition0.getId());
+		assertEquals("Roger S. Pressman", foundBookVOPosition0.getAuthor());
+		assertEquals(simpleDateFormat.parse("2017-11-07 15:09:01.674"), foundBookVOPosition0.getLaunchDate());
+		assertEquals("Engenharia de Software: uma abordagem profissional", foundBookVOPosition0.getTitle());
+		assertEquals(56.00, foundBookVOPosition0.getPrice());
 
-		BookVO foundBookVO7 = listBookVO.get(6);
+		BookVO foundBookVOPosition2 = listBookVO.get(2);
 		
-		assertNotNull(foundBookVO7);
-		assertNotNull(foundBookVO7.getId());
-        assertNotNull(foundBookVO7.getAuthor());
-        assertNotNull(foundBookVO7.getLaunchDate());
-        assertNotNull(foundBookVO7.getTitle());
-        assertNotNull(foundBookVO7.getPrice());
+		assertNotNull(foundBookVOPosition2);
+		assertNotNull(foundBookVOPosition2.getId());
+        assertNotNull(foundBookVOPosition2.getAuthor());
+        assertNotNull(foundBookVOPosition2.getLaunchDate());
+        assertNotNull(foundBookVOPosition2.getTitle());
+        assertNotNull(foundBookVOPosition2.getPrice());
 
-		assertEquals(7, foundBookVO7.getId());
-		assertEquals("Eric Freeman, Elisabeth Freeman, Kathy Sierra, Bert Bates", foundBookVO7.getAuthor());
-		assertEquals(simpleDateFormat.parse("2017-11-07 15:09:01.674"), foundBookVO7.getLaunchDate());
-		assertEquals("Head First Design Patterns", foundBookVO7.getTitle());
-		assertEquals(110.00, foundBookVO7.getPrice());
+		assertEquals(15, foundBookVOPosition2.getId());
+		assertEquals("Aguinaldo Aragon Fernandes e Vladimir Ferraz de Abreu", foundBookVOPosition2.getAuthor());
+		assertEquals(simpleDateFormat.parse("2017-11-07 15:09:01.674"), foundBookVOPosition2.getLaunchDate());
+		assertEquals("Implantando a governança de TI", foundBookVOPosition2.getTitle());
+		assertEquals(54.00, foundBookVOPosition2.getPrice());
 
-        BookVO foundBookVO15 = listBookVO.get(14);
+        BookVO foundBookVOPosition4 = listBookVO.get(4);
 		
-		assertNotNull(foundBookVO15);
-		assertNotNull(foundBookVO15.getId());
-        assertNotNull(foundBookVO15.getAuthor());
-        assertNotNull(foundBookVO15.getLaunchDate());
-        assertNotNull(foundBookVO15.getTitle());
-        assertNotNull(foundBookVO15.getPrice());
+		assertNotNull(foundBookVOPosition4);
+		assertNotNull(foundBookVOPosition4.getId());
+        assertNotNull(foundBookVOPosition4.getAuthor());
+        assertNotNull(foundBookVOPosition4.getLaunchDate());
+        assertNotNull(foundBookVOPosition4.getTitle());
+        assertNotNull(foundBookVOPosition4.getPrice());
 
-		assertEquals(15, foundBookVO15.getId());
-		assertEquals("Aguinaldo Aragon Fernandes e Vladimir Ferraz de Abreu", foundBookVO15.getAuthor());
-		assertEquals(simpleDateFormat.parse("2017-11-07 15:09:01.674"), foundBookVO15.getLaunchDate());
-		assertEquals("Implantando a governança de TI", foundBookVO15.getTitle());
-		assertEquals(54.00, foundBookVO15.getPrice());
+		assertEquals(4, foundBookVOPosition4.getId());
+		assertEquals("Crockford", foundBookVOPosition4.getAuthor());
+		assertEquals(simpleDateFormat.parse("2017-11-07 15:09:01.674"), foundBookVOPosition4.getLaunchDate());
+		assertEquals("JavaScript", foundBookVOPosition4.getTitle());
+		assertEquals(67.00, foundBookVOPosition4.getPrice());
 	}
 
 	@Test
