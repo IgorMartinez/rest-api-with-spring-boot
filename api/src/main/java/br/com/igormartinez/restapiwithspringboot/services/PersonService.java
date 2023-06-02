@@ -1,9 +1,15 @@
 package br.com.igormartinez.restapiwithspringboot.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
@@ -25,11 +31,21 @@ public class PersonService {
     @Autowired
     PersonRepository repository;
 
-    public List<PersonVO> findAll() {
+    @Autowired
+    PagedResourcesAssembler<PersonVO> assembler;
+
+    public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
         logger.info("Finding all people");
-        List<PersonVO> listPersonVO = DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
-        listPersonVO.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
-        return listPersonVO;
+
+        Page<Person> personPage = repository.findAll(pageable);
+
+        Page<PersonVO> personVOPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+
+        personVOPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+
+        Link link = linkTo(methodOn(PersonController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+
+        return assembler.toModel(personVOPage, link);
     }
 
     public PersonVO findById(Long id) {

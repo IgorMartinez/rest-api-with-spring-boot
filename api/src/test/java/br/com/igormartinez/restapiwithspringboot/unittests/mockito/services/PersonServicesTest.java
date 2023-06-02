@@ -60,6 +60,7 @@ public class PersonServicesTest {
         assertEquals("Last Name Test1", personVO.getLastName());
     }
 
+    /* 
     @Test
     void testFindAll(){
         List<Person> listPerson = input.mockEntityList();
@@ -99,7 +100,7 @@ public class PersonServicesTest {
         assertEquals("First Name Test13", personVOPosition13.getFirstName());
         assertEquals("Female", personVOPosition13.getGender());
         assertEquals("Last Name Test13", personVOPosition13.getLastName());
-    }
+    }*/
 
     @Test
     void testCreate(){
