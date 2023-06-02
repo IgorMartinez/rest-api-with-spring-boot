@@ -15,6 +15,7 @@ import br.com.igormartinez.restapiwithspringboot.exceptions.ResourceNotFoundExce
 import br.com.igormartinez.restapiwithspringboot.mapper.DozerMapper;
 import br.com.igormartinez.restapiwithspringboot.model.Person;
 import br.com.igormartinez.restapiwithspringboot.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonService {
@@ -66,6 +67,18 @@ public class PersonService {
         PersonVO updatedPersonVO = DozerMapper.parseObject(updatedPerson, PersonVO.class);
         updatedPersonVO.add(linkTo(methodOn(PersonController.class).findById(updatedPersonVO.getKey())).withSelfRel());
         return updatedPersonVO;
+    }
+
+    @Transactional
+    public PersonVO disablePerson(Long id) {
+        logger.info("Disabling one person");
+
+        repository.disablePerson(id);
+
+        Person person = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No record found with this ID"));
+        PersonVO personVO = DozerMapper.parseObject(person, PersonVO.class);
+        personVO.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+        return personVO;
     }
 
     public void delete(Long id) {
