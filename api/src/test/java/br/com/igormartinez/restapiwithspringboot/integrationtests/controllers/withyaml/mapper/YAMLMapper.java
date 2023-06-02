@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withyaml.mapper;
+package br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withyaml.mapper;
 
 import java.util.logging.Logger;
 

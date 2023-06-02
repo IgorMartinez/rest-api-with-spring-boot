@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withxml;
+package br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withjson;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,14 +20,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.igormartinez.restapiwithspringboot.configs.TestConfigs;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.BookVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
-import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.pagedmodels.PagedModelBookVO;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.wrappers.WrapperBookVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -36,10 +36,10 @@ import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class BookControllerXmlTest extends AbstractIntegrationTest {
+public class BookControllerJsonTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-	private static XmlMapper objectMapper;
+	private static ObjectMapper objectMapper;
 	private static BookVO bookVO;
 
     private final String MOCK_BOOK_AUTHOR = "Lorem Ipsum";
@@ -53,7 +53,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 
     @BeforeAll
 	public static void setup() {
-		objectMapper = new XmlMapper();
+		objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
 		bookVO = new BookVO();
@@ -68,7 +68,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 			given()
 				.basePath("/auth/signin")
 					.port(TestConfigs.SERVER_PORT)
-					.contentType(TestConfigs.CONTENT_TYPE_XML)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.body(user)
 					.when()
 				.post()
@@ -96,8 +96,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.body(bookVO)
 				.when()
@@ -133,8 +132,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.body(bookVO)
 				.when()
@@ -156,8 +154,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.pathParam("id", bookVO.getId())
 				.when()
@@ -192,8 +189,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.pathParam("id", bookVO.getId())
 				.when()
@@ -219,8 +215,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.body(bookVO)
 				.when()
@@ -256,8 +251,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 
 		given()
 			.spec(specification)
-			.contentType(TestConfigs.CONTENT_TYPE_XML)
-			.accept(TestConfigs.CONTENT_TYPE_XML)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 				.pathParam("id", bookVO.getId())
 			.when()
@@ -276,8 +270,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 				.queryParams("page", 1, "size", 5, "direction", "asc")
 				.when()
@@ -288,8 +281,8 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 						.asString();
 
-		PagedModelBookVO pagedModelBookVO = objectMapper.readValue(content, PagedModelBookVO.class);
-		List<BookVO> listBookVO = pagedModelBookVO.getContent();
+		WrapperBookVO wrapperBookVO = objectMapper.readValue(content, WrapperBookVO.class);
+		List<BookVO> listBookVO = wrapperBookVO.getEmbedded().getListBookVO();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		
@@ -352,8 +345,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 
 		given()
 			.spec(specificationWithoutToken)
-			.contentType(TestConfigs.CONTENT_TYPE_XML)
-			.accept(TestConfigs.CONTENT_TYPE_XML)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 			.when()
 				.get()

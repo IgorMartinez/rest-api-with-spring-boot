@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withyaml;
+package br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withyaml;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.com.igormartinez.restapiwithspringboot.configs.TestConfigs;
-import br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withyaml.mapper.YAMLMapper;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withyaml.mapper.YAMLMapper;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.PersonVO;

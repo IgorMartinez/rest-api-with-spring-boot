@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withxml;
+package br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withjson;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
@@ -16,7 +16,7 @@ import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class AuthControllerXmlTest extends AbstractIntegrationTest {
+public class AuthControllerJsonTest extends AbstractIntegrationTest {
     private static TokenVO tokenVO;
 
     @Test
@@ -28,7 +28,7 @@ public class AuthControllerXmlTest extends AbstractIntegrationTest {
 			given()
 				.basePath("/auth/signin")
 					.port(TestConfigs.SERVER_PORT)
-					.contentType(TestConfigs.CONTENT_TYPE_XML)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.body(user)
 					.when()
 				.post()
@@ -50,7 +50,7 @@ public class AuthControllerXmlTest extends AbstractIntegrationTest {
 			given()
 				.basePath("/auth/refresh")
 					.port(TestConfigs.SERVER_PORT)
-					.contentType(TestConfigs.CONTENT_TYPE_XML)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				    .pathParam("username", tokenVO.getUsername())
                     .header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenVO.getRefreshToken())
 				.when()

@@ -1,4 +1,4 @@
-package br.com.igormartinez.restapiwithspringboot.integrationtests.controller.withxml;
+package br.com.igormartinez.restapiwithspringboot.integrationtests.controllers.withjson;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,14 +18,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.igormartinez.restapiwithspringboot.configs.TestConfigs;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.PersonVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
-import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.pagedmodels.PagedModelPersonVO;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.wrappers.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -34,15 +34,15 @@ import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class PersonControllerXmlTest extends AbstractIntegrationTest {
+public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 	private static RequestSpecification specification;
-	private static XmlMapper objectMapper;
+	private static ObjectMapper objectMapper;
 	private static PersonVO personVO;
 
 	@BeforeAll
 	public static void setup() {
-		objectMapper = new XmlMapper();
+		objectMapper = new ObjectMapper();
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
 		personVO = new PersonVO();
@@ -57,8 +57,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 			given()
 				.basePath("/auth/signin")
 					.port(TestConfigs.SERVER_PORT)
-					.contentType(TestConfigs.CONTENT_TYPE_XML)
-					.accept(TestConfigs.CONTENT_TYPE_XML)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.body(user)
 					.when()
 				.post()
@@ -86,8 +85,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.body(personVO)
 				.when()
@@ -125,8 +123,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.body(personVO)
 				.when()
@@ -148,8 +145,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.pathParam("id", personVO.getId())
 				.when()
@@ -170,7 +166,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		assertNotNull(persistedPersonVO.getAddress());
 		assertNotNull(persistedPersonVO.getGender());
 		assertNotNull(persistedPersonVO.getEnabled());
-
+		
 		assertEquals(personVO.getId(), persistedPersonVO.getId());
 		assertEquals("Lorem", persistedPersonVO.getFirstName());
 		assertEquals("Ipsum", persistedPersonVO.getLastName());
@@ -186,8 +182,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_NOTALLOWED)
 					.pathParam("id", personVO.getId())
 				.when()
@@ -201,7 +196,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		assertNotNull(content);
 		assertEquals("Invalid CORS request", content);
 	}
-	
+
 	@Test
 	@Order(5)
 	void testDisablePerson() throws JsonMappingException, JsonProcessingException {
@@ -209,8 +204,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.pathParam("id", personVO.getId())
 				.when()
@@ -251,8 +245,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.body(personVO)
 				.when()
@@ -290,8 +283,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 
 		given()
 			.spec(specification)
-			.contentType(TestConfigs.CONTENT_TYPE_XML)
-			.accept(TestConfigs.CONTENT_TYPE_XML)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 				.pathParam("id", personVO.getId())
 			.when()
@@ -310,8 +302,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.queryParams("page", 3, "size", 10, "direction", "asc")
 				.when()
@@ -322,9 +313,9 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 						.asString();
 
-		PagedModelPersonVO pagedModelPersonVO = objectMapper.readValue(content, PagedModelPersonVO.class);
-		List<PersonVO> listPersonVO = pagedModelPersonVO.getContent();
-				
+		WrapperPersonVO wrapperPersonVO = objectMapper.readValue(content, WrapperPersonVO.class);
+		List<PersonVO> listPersonVO = wrapperPersonVO.getEmbedded().getListPersonVO();
+		
 		PersonVO foundPersonPosition0 = listPersonVO.get(0);
 		
 		assertNotNull(foundPersonPosition0);
@@ -390,8 +381,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 
 		given()
 			.spec(specificationWithoutToken)
-			.contentType(TestConfigs.CONTENT_TYPE_XML)
-			.accept(TestConfigs.CONTENT_TYPE_XML)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
 				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 			.when()
 				.get()
@@ -401,7 +391,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 				.body()
 					.asString();
 	}
-
+	
 	@Test
 	@Order(10)
 	void testFindByFirstName() throws JsonMappingException, JsonProcessingException {
@@ -409,8 +399,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		String content = 
 			given()
 				.spec(specification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
-				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
 					.pathParam("firstName", "Lion")
 					.queryParams("page", 0, "size", 5, "direction", "asc")
@@ -422,8 +411,8 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 						.asString();
 
-		PagedModelPersonVO pagedModelPersonVO = objectMapper.readValue(content, PagedModelPersonVO.class);
-		List<PersonVO> listPersonVO = pagedModelPersonVO.getContent();
+		WrapperPersonVO wrapperPersonVO = objectMapper.readValue(content, WrapperPersonVO.class);
+		List<PersonVO> listPersonVO = wrapperPersonVO.getEmbedded().getListPersonVO();
 
 		PersonVO foundPersonPosition0 = listPersonVO.get(0);
 		
@@ -444,7 +433,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 		assertEquals("M", foundPersonPosition0.getGender());
 		assertTrue(foundPersonPosition0.getEnabled());
 	}
-	
+
 	private void mockPersonVO() {
 		personVO.setFirstName("Lorem");
 		personVO.setLastName("Ipsum");
