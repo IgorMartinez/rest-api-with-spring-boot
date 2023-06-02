@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,48 +58,6 @@ public class PersonServicesTest {
         assertEquals("Female", personVO.getGender());
         assertEquals("Last Name Test1", personVO.getLastName());
     }
-
-    /* 
-    @Test
-    void testFindAll(){
-        List<Person> listPerson = input.mockEntityList();
-        
-        when(repository.findAll()).thenReturn(listPerson);
-
-        List<PersonVO> listPersonVO = service.findAll();
-        assertNotNull(listPersonVO);
-        assertEquals(14, listPersonVO.size());
-
-        PersonVO personVOPosition0 = listPersonVO.get(0);
-        assertNotNull(personVOPosition0);
-        assertNotNull(personVOPosition0.getKey());
-        assertNotNull(personVOPosition0.getLinks());
-        assertTrue(personVOPosition0.toString().contains("links: [</api/person/v1/0>;rel=\"self\"]"));
-        assertEquals("Addres Test0", personVOPosition0.getAddress());
-        assertEquals("First Name Test0", personVOPosition0.getFirstName());
-        assertEquals("Male", personVOPosition0.getGender());
-        assertEquals("Last Name Test0", personVOPosition0.getLastName());
-
-        PersonVO personVOPosition8 = listPersonVO.get(8);
-        assertNotNull(personVOPosition8);
-        assertNotNull(personVOPosition8.getKey());
-        assertNotNull(personVOPosition8.getLinks());
-        assertTrue(personVOPosition8.toString().contains("links: [</api/person/v1/8>;rel=\"self\"]"));
-        assertEquals("Addres Test8", personVOPosition8.getAddress());
-        assertEquals("First Name Test8", personVOPosition8.getFirstName());
-        assertEquals("Male", personVOPosition8.getGender());
-        assertEquals("Last Name Test8", personVOPosition8.getLastName());
-
-        PersonVO personVOPosition13 = listPersonVO.get(13);
-        assertNotNull(personVOPosition13);
-        assertNotNull(personVOPosition13.getKey());
-        assertNotNull(personVOPosition13.getLinks());
-        assertTrue(personVOPosition13.toString().contains("links: [</api/person/v1/13>;rel=\"self\"]"));
-        assertEquals("Addres Test13", personVOPosition13.getAddress());
-        assertEquals("First Name Test13", personVOPosition13.getFirstName());
-        assertEquals("Female", personVOPosition13.getGender());
-        assertEquals("Last Name Test13", personVOPosition13.getLastName());
-    }*/
 
     @Test
     void testCreate(){

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,60 +45,6 @@ public class BookServiceTest {
         input = new MockBook();
         MockitoAnnotations.openMocks(this);
     }
-
-    /* 
-    @Test
-    void testFindAll(){
-        List<Book> listBook = input.mockEntityList();
-        when(repository.findAll()).thenReturn(listBook);
-
-        List<BookVO> listBookVO = service.findAll();
-        assertNotNull(listBookVO);
-        assertEquals(14, listBookVO.size());
-
-        BookVO bookVOPosition0 = listBookVO.get(0);
-        assertNotNull(bookVOPosition0);
-        assertNotNull(bookVOPosition0.getId());
-        assertNotNull(bookVOPosition0.getAuthor());
-        assertNotNull(bookVOPosition0.getLaunchDate());
-        assertNotNull(bookVOPosition0.getPrice());
-        assertNotNull(bookVOPosition0.getTitle());
-        assertEquals(0L, bookVOPosition0.getId());
-        assertEquals("Author 0", bookVOPosition0.getAuthor());
-        assertEquals(new Date(0), bookVOPosition0.getLaunchDate());
-        assertEquals(0L, bookVOPosition0.getPrice());
-        assertEquals("Title 0", bookVOPosition0.getTitle());
-        assertTrue(bookVOPosition0.toString().contains("links: [</api/book/v1/0>;rel=\"self\"]"));
-
-        BookVO bookVOPosition7 = listBookVO.get(7);
-        assertNotNull(bookVOPosition7);
-        assertNotNull(bookVOPosition7.getId());
-        assertNotNull(bookVOPosition7.getAuthor());
-        assertNotNull(bookVOPosition7.getLaunchDate());
-        assertNotNull(bookVOPosition7.getPrice());
-        assertNotNull(bookVOPosition7.getTitle());
-        assertEquals(7L, bookVOPosition7.getId());
-        assertEquals("Author 7", bookVOPosition7.getAuthor());
-        assertEquals(new Date(7), bookVOPosition7.getLaunchDate());
-        assertEquals(7L, bookVOPosition7.getPrice());
-        assertEquals("Title 7", bookVOPosition7.getTitle());
-        assertTrue(bookVOPosition7.toString().contains("links: [</api/book/v1/7>;rel=\"self\"]"));
-
-        BookVO bookVOPosition13 = listBookVO.get(13);
-        assertNotNull(bookVOPosition13);
-        assertNotNull(bookVOPosition13.getId());
-        assertNotNull(bookVOPosition13.getAuthor());
-        assertNotNull(bookVOPosition13.getLaunchDate());
-        assertNotNull(bookVOPosition13.getPrice());
-        assertNotNull(bookVOPosition13.getTitle());
-        assertEquals(13L, bookVOPosition13.getId());
-        assertEquals("Author 13", bookVOPosition13.getAuthor());
-        assertEquals(new Date(13), bookVOPosition13.getLaunchDate());
-        assertEquals(13L, bookVOPosition13.getPrice());
-        assertEquals("Title 13", bookVOPosition13.getTitle());
-        assertTrue(bookVOPosition13.toString().contains("links: [</api/book/v1/13>;rel=\"self\"]"));
-    }
-    */
 
     @Test
     void testFindById(){
