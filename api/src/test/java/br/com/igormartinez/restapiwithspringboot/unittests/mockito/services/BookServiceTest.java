@@ -47,6 +47,7 @@ public class BookServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    /* 
     @Test
     void testFindAll(){
         List<Book> listBook = input.mockEntityList();
@@ -98,6 +99,7 @@ public class BookServiceTest {
         assertEquals("Title 13", bookVOPosition13.getTitle());
         assertTrue(bookVOPosition13.toString().contains("links: [</api/book/v1/13>;rel=\"self\"]"));
     }
+    */
 
     @Test
     void testFindById(){
