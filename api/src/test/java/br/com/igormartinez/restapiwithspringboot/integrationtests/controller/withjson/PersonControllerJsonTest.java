@@ -304,7 +304,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 				.spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
-				.queryParams("page", 3, "size", 10, "direction", "asc")
+					.queryParams("page", 3, "size", 10, "direction", "asc")
 				.when()
 					.get()
 				.then()
@@ -392,6 +392,48 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 					.asString();
 	}
 	
+	@Test
+	@Order(10)
+	void testFindByFirstName() throws JsonMappingException, JsonProcessingException {
+
+		String content = 
+			given()
+				.spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+					.pathParam("firstName", "Lion")
+					.queryParams("page", 0, "size", 5, "direction", "asc")
+				.when()
+					.get("findByFirstName/{firstName}")
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+
+		WrapperPersonVO wrapperPersonVO = objectMapper.readValue(content, WrapperPersonVO.class);
+		List<PersonVO> listPersonVO = wrapperPersonVO.getEmbedded().getListPersonVO();
+
+		PersonVO foundPersonPosition0 = listPersonVO.get(0);
+		
+		assertEquals(1, listPersonVO.size());
+
+		assertNotNull(foundPersonPosition0);
+		assertNotNull(foundPersonPosition0.getId());
+		assertNotNull(foundPersonPosition0.getFirstName());
+		assertNotNull(foundPersonPosition0.getLastName());
+		assertNotNull(foundPersonPosition0.getAddress());
+		assertNotNull(foundPersonPosition0.getGender());
+		assertNotNull(foundPersonPosition0.getEnabled());
+
+		assertEquals(1, foundPersonPosition0.getId());
+		assertEquals("Lionel", foundPersonPosition0.getFirstName());
+		assertEquals("Messi", foundPersonPosition0.getLastName());
+		assertEquals("Argentina", foundPersonPosition0.getAddress());
+		assertEquals("M", foundPersonPosition0.getGender());
+		assertTrue(foundPersonPosition0.getEnabled());
+	}
+
 	private void mockPersonVO() {
 		personVO.setFirstName("Lorem");
 		personVO.setLastName("Ipsum");

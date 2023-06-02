@@ -445,6 +445,53 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 					.asString();
 	}
 
+	@Test
+	@Order(10)
+	void testFindByFirstName() throws JsonMappingException, JsonProcessingException {
+
+		PagedModelPersonVO pagedModelPersonVO = 
+			given()
+				.spec(specification)
+				.config(RestAssuredConfig
+					.config()
+					.encoderConfig(EncoderConfig.encoderConfig()
+					.encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YAML, ContentType.TEXT))
+				)
+				.contentType(TestConfigs.CONTENT_TYPE_YAML)
+				.accept(TestConfigs.CONTENT_TYPE_YAML)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+					.pathParam("firstName", "Lion")
+					.queryParams("page", 0, "size", 5, "direction", "asc")
+				.when()
+					.get("findByFirstName/{firstName}")
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.as(PagedModelPersonVO.class, objectMapper);
+
+		List<PersonVO> listPersonVO = pagedModelPersonVO.getContent();
+		
+		PersonVO foundPersonPosition0 = listPersonVO.get(0);
+		
+		assertEquals(1, listPersonVO.size());
+
+		assertNotNull(foundPersonPosition0);
+		assertNotNull(foundPersonPosition0.getId());
+		assertNotNull(foundPersonPosition0.getFirstName());
+		assertNotNull(foundPersonPosition0.getLastName());
+		assertNotNull(foundPersonPosition0.getAddress());
+		assertNotNull(foundPersonPosition0.getGender());
+		assertNotNull(foundPersonPosition0.getEnabled());
+
+		assertEquals(1, foundPersonPosition0.getId());
+		assertEquals("Lionel", foundPersonPosition0.getFirstName());
+		assertEquals("Messi", foundPersonPosition0.getLastName());
+		assertEquals("Argentina", foundPersonPosition0.getAddress());
+		assertEquals("M", foundPersonPosition0.getGender());
+		assertTrue(foundPersonPosition0.getEnabled());
+	}
+
 	private void mockPersonVO() {
 		personVO.setFirstName("Lorem");
 		personVO.setLastName("Ipsum");
