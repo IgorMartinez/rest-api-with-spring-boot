@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +24,7 @@ import br.com.igormartinez.restapiwithspringboot.integrationtests.testcontainers
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.AccountCredentialsVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.PersonVO;
 import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.TokenVO;
+import br.com.igormartinez.restapiwithspringboot.integrationtests.vo.pagedmodels.PagedModelPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -341,7 +341,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 	@Order(8)
 	void testFindAll() throws JsonMappingException, JsonProcessingException {
 
-		PersonVO arrayPersonVO[] = 
+		PagedModelPersonVO pagedModelPersonVO = 
 			given()
 				.spec(specification)
 				.config(RestAssuredConfig
@@ -352,49 +352,67 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 				.contentType(TestConfigs.CONTENT_TYPE_YAML)
 				.accept(TestConfigs.CONTENT_TYPE_YAML)
 					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+				.queryParams("page", 3, "size", 10, "direction", "asc")
 				.when()
 					.get()
 				.then()
 					.statusCode(200)
 				.extract()
 					.body()
-						.as(PersonVO[].class, objectMapper);
+						.as(PagedModelPersonVO.class, objectMapper);
 
-		List<PersonVO> listPersonVO = Arrays.asList(arrayPersonVO);
+		List<PersonVO> listPersonVO = pagedModelPersonVO.getContent();
 		
-		PersonVO foundPerson1 = listPersonVO.get(0);
+		PersonVO foundPersonPosition0 = listPersonVO.get(0);
 		
-		assertNotNull(foundPerson1);
-		assertNotNull(foundPerson1.getId());
-		assertNotNull(foundPerson1.getFirstName());
-		assertNotNull(foundPerson1.getLastName());
-		assertNotNull(foundPerson1.getAddress());
-		assertNotNull(foundPerson1.getGender());
-		assertNotNull(foundPerson1.getEnabled());
+		assertNotNull(foundPersonPosition0);
+		assertNotNull(foundPersonPosition0.getId());
+		assertNotNull(foundPersonPosition0.getFirstName());
+		assertNotNull(foundPersonPosition0.getLastName());
+		assertNotNull(foundPersonPosition0.getAddress());
+		assertNotNull(foundPersonPosition0.getGender());
+		assertNotNull(foundPersonPosition0.getEnabled());
 
-		assertEquals(1, foundPerson1.getId());
-		assertEquals("Lionel", foundPerson1.getFirstName());
-		assertEquals("Messi", foundPerson1.getLastName());
-		assertEquals("Argentina", foundPerson1.getAddress());
-		assertEquals("M", foundPerson1.getGender());
-		assertTrue(foundPerson1.getEnabled());
+		assertEquals(670, foundPersonPosition0.getId());
+		assertEquals("Alic", foundPersonPosition0.getFirstName());
+		assertEquals("Terbrug", foundPersonPosition0.getLastName());
+		assertEquals("3 Eagle Crest Court", foundPersonPosition0.getAddress());
+		assertEquals("M", foundPersonPosition0.getGender());
+		assertTrue(foundPersonPosition0.getEnabled());
 
-		PersonVO foundPerson3 = listPersonVO.get(2);
+		PersonVO foundPersonPosition5 = listPersonVO.get(5);
 		
-		assertNotNull(foundPerson3);
-		assertNotNull(foundPerson3.getId());
-		assertNotNull(foundPerson3.getFirstName());
-		assertNotNull(foundPerson3.getLastName());
-		assertNotNull(foundPerson3.getAddress());
-		assertNotNull(foundPerson3.getGender());
-		assertNotNull(foundPerson3.getEnabled());
+		assertNotNull(foundPersonPosition5);
+		assertNotNull(foundPersonPosition5.getId());
+		assertNotNull(foundPersonPosition5.getFirstName());
+		assertNotNull(foundPersonPosition5.getLastName());
+		assertNotNull(foundPersonPosition5.getAddress());
+		assertNotNull(foundPersonPosition5.getGender());
+		assertNotNull(foundPersonPosition5.getEnabled());
 
-		assertEquals(3, foundPerson3.getId());
-		assertEquals("Cristiano", foundPerson3.getFirstName());
-		assertEquals("Ronaldo", foundPerson3.getLastName());
-		assertEquals("Portugal", foundPerson3.getAddress());
-		assertEquals("M", foundPerson3.getGender());
-		assertTrue(foundPerson3.getEnabled());
+		assertEquals(904, foundPersonPosition5.getId());
+		assertEquals("Allegra", foundPersonPosition5.getFirstName());
+		assertEquals("Dome", foundPersonPosition5.getLastName());
+		assertEquals("57 Roxbury Pass", foundPersonPosition5.getAddress());
+		assertEquals("F", foundPersonPosition5.getGender());
+		assertTrue(foundPersonPosition5.getEnabled());
+
+		PersonVO foundPersonPosition9 = listPersonVO.get(9);
+		
+		assertNotNull(foundPersonPosition9);
+		assertNotNull(foundPersonPosition9.getId());
+		assertNotNull(foundPersonPosition9.getFirstName());
+		assertNotNull(foundPersonPosition9.getLastName());
+		assertNotNull(foundPersonPosition9.getAddress());
+		assertNotNull(foundPersonPosition9.getGender());
+		assertNotNull(foundPersonPosition9.getEnabled());
+
+		assertEquals(680, foundPersonPosition9.getId());
+		assertEquals("Almeria", foundPersonPosition9.getFirstName());
+		assertEquals("Curm", foundPersonPosition9.getLastName());
+		assertEquals("34 Burrows Point", foundPersonPosition9.getAddress());
+		assertEquals("F", foundPersonPosition9.getGender());
+		assertFalse(foundPersonPosition9.getEnabled());
 	}
 
 	@Test
