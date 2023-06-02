@@ -417,6 +417,43 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(9)
+	void testFindAllHATEOAS() throws JsonMappingException, JsonProcessingException {
+
+		String rawContent = 
+			given()
+				.spec(specification)
+				.config(RestAssuredConfig
+					.config()
+					.encoderConfig(EncoderConfig.encoderConfig()
+					.encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YAML, ContentType.TEXT))
+				)
+				.contentType(TestConfigs.CONTENT_TYPE_YAML)
+					.accept(TestConfigs.CONTENT_TYPE_YAML)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+					.queryParams("page", 3, "size", 10, "direction", "asc")
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+		
+		String content = rawContent.replace("\n", "").replace("\r", "").replace("\t", "").replace(" ", "");
+		
+		assertTrue(content.contains("rel:\"self\"href:\"http://localhost:8888/api/person/v1/670\""));
+		assertTrue(content.contains("rel:\"self\"href:\"http://localhost:8888/api/person/v1/904\""));
+		assertTrue(content.contains("rel:\"self\"href:\"http://localhost:8888/api/person/v1/680\""));
+		assertTrue(content.contains("rel:\"first\"href:\"http://localhost:8888/api/person/v1?direction=asc&page=0&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("rel:\"prev\"href:\"http://localhost:8888/api/person/v1?direction=asc&page=2&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("rel:\"self\"href:\"http://localhost:8888/api/person/v1?page=3&size=10&direction=asc\""));
+		assertTrue(content.contains("rel:\"next\"href:\"http://localhost:8888/api/person/v1?direction=asc&page=4&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("rel:\"last\"href:\"http://localhost:8888/api/person/v1?direction=asc&page=100&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("page:size:10totalElements:1003totalPages:101number:3"));
+	}
+
+	@Test
+	@Order(10)
 	void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
 
 		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
@@ -446,7 +483,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Order(10)
+	@Order(11)
 	void testFindByFirstName() throws JsonMappingException, JsonProcessingException {
 
 		PagedModelPersonVO pagedModelPersonVO = 
