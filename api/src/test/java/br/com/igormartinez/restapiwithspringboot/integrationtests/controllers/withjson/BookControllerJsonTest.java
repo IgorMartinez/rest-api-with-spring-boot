@@ -334,6 +334,35 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(8)
+	void testFindAllHATEOAS() throws JsonMappingException, JsonProcessingException, ParseException {
+
+		String content = 
+			given()
+				.spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+				.queryParams("page", 1, "size", 5, "direction", "asc")
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+		
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/11\""));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/15\""));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/4\""));
+		assertTrue(content.contains("\"first\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=0&size=5&sort=title,asc\"}"));
+		assertTrue(content.contains("\"prev\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=0&size=5&sort=title,asc\"}"));
+		assertTrue(content.contains("\"self\":{\"href\":\"http://localhost:8888/api/book/v1?page=1&size=5&direction=asc\"}"));
+		assertTrue(content.contains("\"next\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=2&size=5&sort=title,asc\"}"));
+		assertTrue(content.contains("\"last\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=2&size=5&sort=title,asc\"}"));
+		assertTrue(content.contains("\"page\":{\"size\":5,\"totalElements\":15,\"totalPages\":3,\"number\":1}"));
+	}
+
+	@Test
+	@Order(9)
 	void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
 
 		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()

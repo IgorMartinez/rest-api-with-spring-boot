@@ -341,6 +341,37 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(8)
+	void testFindAllHATEOAS() throws JsonMappingException, JsonProcessingException, ParseException {
+
+		String content = 
+			given()
+				.spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
+				.accept(TestConfigs.CONTENT_TYPE_XML)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCALHOST)
+				.queryParams("page", 1, "size", 5, "direction", "asc")
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/book/v1/11</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/book/v1/15</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/book/v1/4</href></links>"));
+		assertTrue(content.contains("<links><rel>first</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=0&amp;size=5&amp;sort=title,asc</href></links>"));
+		assertTrue(content.contains("<links><rel>prev</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=0&amp;size=5&amp;sort=title,asc</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/book/v1?page=1&amp;size=5&amp;direction=asc</href></links>"));
+		assertTrue(content.contains("<links><rel>next</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=2&amp;size=5&amp;sort=title,asc</href></links>"));
+		assertTrue(content.contains("<links><rel>last</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=2&amp;size=5&amp;sort=title,asc</href></links>"));
+		assertTrue(content.contains("<page><size>5</size><totalElements>15</totalElements><totalPages>3</totalPages><number>1</number></page>"));
+				
+	}
+
+	@Test
+	@Order(9)
 	void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
 
 		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
