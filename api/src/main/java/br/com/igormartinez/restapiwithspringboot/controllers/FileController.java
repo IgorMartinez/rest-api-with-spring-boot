@@ -1,6 +1,9 @@
 package br.com.igormartinez.restapiwithspringboot.controllers;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,5 +36,15 @@ public class FileController {
             .fromCurrentContextPath().path("/api/file/v1/dowloadFile/").path(fileName).toUriString();
 
         return new UploadFileResponseVO(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+    }
+
+    @PostMapping("/uploadMultipleFiles")
+    public List<UploadFileResponseVO> uploadFile(@RequestParam("files") MultipartFile[] files) {
+        logger.info("Storing files to disk");
+
+        return Arrays.asList(files)
+            .stream()
+            .map(file -> uploadFile(file))
+            .collect(Collectors.toList());
     }
 }
