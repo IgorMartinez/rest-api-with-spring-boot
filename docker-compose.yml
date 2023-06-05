@@ -8,9 +8,9 @@ services:
     restart: always
     environment:
       TZ: America/Sao_Paulo
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin123
       MYSQL_USER: docker
-      MYSQL_USER_PASSWORD: admin
+      MYSQL_USER_PASSWORD: admin123
       MYSQL_DATABASE: restapiwithspringboot
       MYSQL_ROOT_HOST: "%"
       MYSQL_TCP_PORT: 3308
@@ -29,7 +29,7 @@ services:
       TZ: America/Sao_Paulo
       SPRING.DATASOURCE.URL: jdbc:mysql://db:3308/restapiwithspringboot?useTimezone=true&serverTimezone=UTC
       SPRING.DATASOURCE.USERNAME: root
-      SPRING.DATASOURCE.PASSWORD: admin
+      SPRING.DATASOURCE.PASSWORD: admin123
     ports:
       - 80:80
     command: mvn springboot:run
