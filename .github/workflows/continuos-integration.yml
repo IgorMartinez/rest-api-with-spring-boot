@@ -1,3 +1,4 @@
+# Just an example of how to write a github action
 name: Continuos Integration with Github Actions
 
 on:
